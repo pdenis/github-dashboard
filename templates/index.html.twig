@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% for repository in repositories %}
+        {% if loop.index %2 == 1 %}
+        <div class="row">
+        {% endif %}
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{{ repository.html_url }}" alt="{{ repository.full_name }} link">{{ repository.full_name }}</a</h5>
+                        <p class="card-text">
+                            <table>
+                                {% for pullRequest in repository.details.pull_requests %}
+                                    <tr>
+                                        <td>{{ pullRequest.title }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% if loop.index %2 == 0 %}
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
