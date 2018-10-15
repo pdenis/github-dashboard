@@ -41,6 +41,10 @@ class OrganizationRepository
             $repositories[$key]['details'] = $this->findRepositoryDetails($organizationName, $repository['name']);
         }
 
+        usort($repositories, function ($a, $b) {
+            return count($a['details']['pull_requests']) < count($b['details']['pull_requests']);
+        });
+
         return $repositories;
     }
 
@@ -48,7 +52,12 @@ class OrganizationRepository
     {
         $details = [];
 
-        $details['pull_requests'] = $this->client->api('pull_request')->all($organizationName, $repositoryName);
+        $details['pull_requests']  = $this->client->api('pull_request')->all($organizationName, $repositoryName);
+        try {
+            $details['latest_release'] = $this->client->api('repo')->releases()->latest($organizationName, $repositoryName);
+        } catch(\Exception $e) {
+            $details['latest_release']['tag_name'] = 'none';
+        }
 
         return $details;
     }

@@ -7,13 +7,25 @@
         {% endif %}
             <div class="col-sm-6">
                 <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <a target="_blank" href="{{ repository.html_url }}" alt="{{ repository.full_name }} link">{{ repository.full_name }}</a>
+                            <span class="badge badge-secondary"> {{ repository.details.latest_release.tag_name }}</span>
+                        </h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title"><a href="{{ repository.html_url }}" alt="{{ repository.full_name }} link">{{ repository.full_name }}</a</h5>
+
                         <p class="card-text">
                             <table>
                                 {% for pullRequest in repository.details.pull_requests %}
                                     <tr>
-                                        <td>{{ pullRequest.title }}</td>
+                                        <td><img  style="width:30px;" src="{{ pullRequest.user.avatar_url }}" alt="{{ pullRequest.user.login }}" title="{{ pullRequest.user.login }}"/>&nbsp;</td>
+                                        <td><a class="card-link" target="_blank" href="{{ pullRequest.url }}" title="{{ pullRequest.title }}">{{ pullRequest.title }}</a></td>
+                                        <td>
+                                            {% for reviewer in pullRequest.requested_reviewers %}
+                                            <img style="width:30px;" src="{{ reviewer.avatar_url }}" title="{{ reviewer.login }}" alt="{{ reviewer.login }}" />
+                                            {% endfor %}
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </table>
